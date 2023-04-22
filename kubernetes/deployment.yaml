@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: d2-live
+spec:
+  selector:
+    matchLabels:
+      app: d2-live
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: d2-live
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: d2-live
+        image: ghcr.io/watt3r/d2-live:latest
+        imagePullPolicy: "Always"
+        ports:
+        - name: web
+          containerPort: 8090
+      imagePullSecrets:
+        - name: github-container-registry

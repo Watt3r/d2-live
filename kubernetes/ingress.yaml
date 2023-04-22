@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: d2-live-ingress
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+
+spec:
+  tls:
+  - hosts:
+    - d2.atlas.lucas.tools
+    secretName: atlas-tls
+  rules:
+  - host: d2.atlas.lucas.tools
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: d2-live
+            port:
+              name: web
