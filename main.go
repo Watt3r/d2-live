@@ -5,19 +5,22 @@ import (
 	"compress/flate"
 	"context"
 	"encoding/base64"
+	"encoding/json"
 	"errors"
 	"io"
 	"log"
-        "sort"
 	"net/http"
+	"sort"
 
 	"github.com/husobee/vestigo"
+	"oss.terrastruct.com/d2/d2graph"
 	"oss.terrastruct.com/d2/d2layouts/d2dagrelayout"
 	"oss.terrastruct.com/d2/d2lib"
 	"oss.terrastruct.com/d2/d2renderers/d2svg"
 	"oss.terrastruct.com/d2/lib/textmeasure"
-        	"oss.terrastruct.com/d2/d2graph"
 )
+
+var Version string
 
 var compressionDict = "->" +
 	"<-" +
@@ -57,6 +60,16 @@ func init() {
 	for _, k := range common {
 		compressionDict += k
 	}
+}
+
+type InfoResponse struct {
+	Status  string `json:"status"`
+	Version string `json:"version"`
+}
+
+func infoHandler(rw http.ResponseWriter, req *http.Request) {
+	rw.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(rw).Encode(InfoResponse{Status: "Success", Version: Version})
 }
 
 func GetD2SVGHandler(rw http.ResponseWriter, req *http.Request) {
@@ -99,6 +112,8 @@ func handleGetD2SVG(ctx context.Context, req *http.Request) ([]byte, error) {
 
 func main() {
 	router := vestigo.NewRouter()
+
+	router.Get("/info", infoHandler)
 
 	router.Get("/svg/:encodedD2", GetD2SVGHandler)
 

@@ -12,7 +12,11 @@ RUN --mount=type=cache,target=/go/pkg/mod go mod download
 
 COPY *.go ./
 
-RUN --mount=type=cache,mode=0755,target=/root/.cache/go-build --mount=type=cache,mode=0755,target=/root/go go build -o /http-server
+RUN --mount=type=cache,mode=0755,target=/root/.cache/go-build --mount=type=cache,mode=0755,target=/root/go \
+  go build \
+  -ldflags="-w -s -X 'main.Version=${VERSION}'" \
+  -o /http-server
+
 
 EXPOSE 8090
 
