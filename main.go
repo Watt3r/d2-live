@@ -62,6 +62,10 @@ func init() {
 	}
 }
 
+func rootHandler(rw http.ResponseWriter, req *http.Request) {
+	http.Redirect(rw, req, "https://github.com/Watt3r/d2-live", 301)
+}
+
 type InfoResponse struct {
 	Status  string `json:"status"`
 	Version string `json:"version"`
@@ -112,6 +116,8 @@ func handleGetD2SVG(ctx context.Context, req *http.Request) ([]byte, error) {
 
 func main() {
 	router := vestigo.NewRouter()
+
+	router.Get("/", rootHandler)
 
 	router.Get("/info", infoHandler)
 
