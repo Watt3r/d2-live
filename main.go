@@ -11,7 +11,10 @@ import (
 	"log"
 	"net/http"
 	"sort"
+	"strings"
+	"time"
 
+	statsd "github.com/DataDog/datadog-go/v5/statsd"
 	"github.com/husobee/vestigo"
 	"oss.terrastruct.com/d2/d2graph"
 	"oss.terrastruct.com/d2/d2layouts/d2dagrelayout"
@@ -62,7 +65,7 @@ func init() {
 	}
 }
 
-func rootHandler(rw http.ResponseWriter, req *http.Request) {
+func (c *Controller) rootHandler(rw http.ResponseWriter, req *http.Request) {
 	http.Redirect(rw, req, "https://github.com/Watt3r/d2-live", 301)
 }
 
@@ -71,15 +74,15 @@ type InfoResponse struct {
 	Version string `json:"version"`
 }
 
-func infoHandler(rw http.ResponseWriter, req *http.Request) {
+func (c *Controller) infoHandler(rw http.ResponseWriter, req *http.Request) {
 	rw.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(rw).Encode(InfoResponse{Status: "Success", Version: Version})
 }
 
-func GetD2SVGHandler(rw http.ResponseWriter, req *http.Request) {
+func (c *Controller) GetD2SVGHandler(rw http.ResponseWriter, req *http.Request) {
 	ctx := context.Background()
 
-	svg, err := handleGetD2SVG(ctx, req)
+	svg, err := c.handleGetD2SVG(ctx, req)
 
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusBadRequest)
@@ -90,7 +93,7 @@ func GetD2SVGHandler(rw http.ResponseWriter, req *http.Request) {
 	rw.Write(svg)
 }
 
-func handleGetD2SVG(ctx context.Context, req *http.Request) ([]byte, error) {
+func (c *Controller) handleGetD2SVG(ctx context.Context, req *http.Request) ([]byte, error) {
 	urlencoded := vestigo.Param(req, "encodedD2")
 	decoded, err := Decode(urlencoded)
 	if err != nil {
@@ -114,14 +117,38 @@ func handleGetD2SVG(ctx context.Context, req *http.Request) ([]byte, error) {
 	return out, nil
 }
 
+type Controller struct {
+	Metrics *statsd.Client
+}
+
+func (c *Controller) statsdMiddleware(f http.HandlerFunc) http.HandlerFunc {
+	return func(rw http.ResponseWriter, req *http.Request) {
+		start := time.Now()
+		f(rw, req)
+		path := strings.Split(req.URL.Path, "/")[1]
+		c.Metrics.Histogram("d2-live."+path, time.Now().Sub(start).Seconds(), []string{"version:" + Version}, 1)
+	}
+}
+
 func main() {
+	metricsClient, err := statsd.New("127.0.0.1:8125",
+		statsd.WithTags([]string{"env:prod", "service:myservice"}),
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	c := Controller{
+		Metrics: metricsClient,
+	}
+
 	router := vestigo.NewRouter()
 
-	router.Get("/", rootHandler)
+	router.Get("/", c.rootHandler)
 
-	router.Get("/info", infoHandler)
+	router.Get("/info", c.infoHandler, c.statsdMiddleware)
 
-	router.Get("/svg/:encodedD2", GetD2SVGHandler)
+	router.Get("/svg/:encodedD2", c.GetD2SVGHandler, c.statsdMiddleware)
 
 	log.Fatal(http.ListenAndServe(":8090", router))
 }

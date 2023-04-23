@@ -10,6 +10,8 @@ require (
 
 require (
 	cdr.dev/slog v1.4.2-0.20221206192828-e4803b10ae17 // indirect
+	github.com/DataDog/datadog-go/v5 v5.3.0 // indirect
+	github.com/Microsoft/go-winio v0.5.0 // indirect
 	github.com/PuerkitoBio/goquery v1.8.0 // indirect
 	github.com/alecthomas/chroma v0.10.0 // indirect
 	github.com/alecthomas/chroma/v2 v2.5.0 // indirect
