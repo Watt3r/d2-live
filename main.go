@@ -131,7 +131,7 @@ func (c *Controller) statsdMiddleware(f http.HandlerFunc) http.HandlerFunc {
 }
 
 func main() {
-	metricsClient, err := statsd.New("127.0.0.1:8125",
+	metricsClient, err := statsd.New("172.17.33.150:8125",
 		statsd.WithTags([]string{"env:prod", "service:myservice"}),
 	)
 	if err != nil {
