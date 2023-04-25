@@ -4,7 +4,7 @@
 
 [![Publish Status](https://github.com/Watt3r/d2-live/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/Watt3r/d2-live/actions/workflows/docker-publish.yml)
 [![Build Status](https://github.com/Watt3r/d2-live/actions/workflows/build.yml/badge.svg)](https://github.com/Watt3r/d2-live/actions/workflows/build.yml)
-[![Uptime](https://kuma.atlas.lucas.tools/api/badge/8/uptime/240)](https://kuma.atlas.lucas.tools/)
+[![Uptime](https://atlas.lucas.tools/api/badge/8/uptime/240)](https://atlas.lucas.tools/)
 [![License](https://img.shields.io/badge/License-MIT-orange.svg)](https://github.com/Watt3r/d2-live/blob/master/LICENSE)
 [![Coverage Status](https://coveralls.io/repos/github/Watt3r/d2-live/badge.svg?branch=master)](https://coveralls.io/github/Watt3r/d2-live?branch=master)
 </div>
