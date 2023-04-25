@@ -3,14 +3,13 @@ module github.com/watt3r/d2-live
 go 1.20
 
 require (
+	github.com/DataDog/datadog-go/v5 v5.3.0
 	github.com/husobee/vestigo v1.1.1
 	oss.terrastruct.com/d2 v0.4.1
-	oss.terrastruct.com/util-go v0.0.0-20230412185012-06c6224a6f77
 )
 
 require (
 	cdr.dev/slog v1.4.2-0.20221206192828-e4803b10ae17 // indirect
-	github.com/DataDog/datadog-go/v5 v5.3.0 // indirect
 	github.com/Microsoft/go-winio v0.5.0 // indirect
 	github.com/PuerkitoBio/goquery v1.8.0 // indirect
 	github.com/alecthomas/chroma v0.10.0 // indirect
@@ -39,4 +38,5 @@ require (
 	golang.org/x/text v0.8.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	gonum.org/v1/plot v0.12.0 // indirect
+	oss.terrastruct.com/util-go v0.0.0-20230412185012-06c6224a6f77 // indirect
 )
