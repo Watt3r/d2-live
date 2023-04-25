@@ -11,6 +11,7 @@ COPY go.* ./
 RUN --mount=type=cache,target=/go/pkg/mod go mod download
 
 COPY *.go ./
+COPY ./internal ./internal
 
 RUN --mount=type=cache,mode=0755,target=/root/.cache/go-build --mount=type=cache,mode=0755,target=/root/go \
   go build \
