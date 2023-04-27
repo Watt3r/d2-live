@@ -16,7 +16,9 @@ import (
 func (c *Controller) GetD2SVGHandler(rw http.ResponseWriter, req *http.Request) {
 	ctx := context.Background()
 
-	svg, err := c.handleGetD2SVG(ctx, req)
+	urlencoded := vestigo.Param(req, "encodedD2")
+
+	svg, err := c.handleGetD2SVG(ctx, urlencoded)
 
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusBadRequest)
@@ -27,9 +29,8 @@ func (c *Controller) GetD2SVGHandler(rw http.ResponseWriter, req *http.Request) 
 	rw.Write(svg)
 }
 
-func (c *Controller) handleGetD2SVG(ctx context.Context, req *http.Request) ([]byte, error) {
-	urlencoded := vestigo.Param(req, "encodedD2")
-	decoded, err := urlenc.Decode(urlencoded)
+func (c *Controller) handleGetD2SVG(ctx context.Context, encoded string) ([]byte, error) {
+	decoded, err := urlenc.Decode(encoded)
 	if err != nil {
 		return nil, errors.New("Invalid Base64 data.")
 	}
