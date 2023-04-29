@@ -10,6 +10,7 @@ import (
 
 type Controller struct {
 	Metrics *statsd.Client
+	Version string
 }
 
 func (c *Controller) StatsdMiddleware(f http.HandlerFunc) http.HandlerFunc {
