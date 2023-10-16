@@ -14,7 +14,8 @@ var errFail = errors.New("unit test failure")
 
 func TestController_GetD2SVGHandler(t *testing.T) {
 	type state struct {
-		encoded string
+		pathEncoded  string
+		queryEncoded string
 	}
 	type want struct {
 		code int
@@ -25,8 +26,10 @@ func TestController_GetD2SVGHandler(t *testing.T) {
 		state
 		want
 	}{
-		{"happy path", state{encoded: "qlDQtVOo5AIEAAD__w=="}, want{200, "<?xml version=\"1.0\" encoding=\"utf-8\"?>"}},
-		{"fail bad request", state{encoded: "qlDQtVOo5AIEAAD__w==&"}, want{400, "Invalid Base64 data."}},
+		{"happy path with path param", state{pathEncoded: "qlDQtVOo5AIEAAD__w=="}, want{200, "<?xml version=\"1.0\" encoding=\"utf-8\"?>"}},
+		{"happy path with query param", state{queryEncoded: "qlDQtVOo5AIEAAD__w=="}, want{200, "<?xml version=\"1.0\" encoding=\"utf-8\"?>"}},
+		{"fail bad request with path param", state{pathEncoded: "qlDQtVOo5AIEAAD__w==&"}, want{400, "Invalid Base64 data."}},
+		{"fail bad request with query param", state{queryEncoded: "qlDQtVOo5AIEAAD__w==&"}, want{400, "Invalid Base64 data."}},
 	}
 
 	for _, tc := range testCases {
@@ -35,12 +38,18 @@ func TestController_GetD2SVGHandler(t *testing.T) {
 
 			req := httptest.NewRequest(http.MethodGet, "/svg", nil)
 			q := req.URL.Query()
-			q.Set(":encodedD2", tc.state.encoded)
+			if tc.state.pathEncoded != "" {
+				q.Set(":encodedD2", tc.state.pathEncoded)
+			}
+			if tc.state.queryEncoded != "" {
+				q.Set("script", tc.state.queryEncoded)
+			}
 			req.URL.RawQuery = q.Encode()
+
 			resp := httptest.NewRecorder()
 
 			c.GetD2SVGHandler(resp, req)
-			assert.Equal(t, resp.Code, tc.want.code)
+			assert.Equal(t, tc.want.code, resp.Code)
 			if !strings.Contains(resp.Body.String(), tc.want.err) {
 				t.Errorf(
 					`response body "%s" does not contain "%s"`,

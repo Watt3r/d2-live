@@ -11,10 +11,6 @@ import (
 
 var Version string
 
-func rootHandler(rw http.ResponseWriter, req *http.Request) {
-	http.Redirect(rw, req, "https://github.com/Watt3r/d2-live", 301)
-}
-
 func main() {
 	metricsClient, err := statsd.New("172.17.33.150:8125",
 		statsd.WithTags([]string{"env:prod", "service:myservice"}),
@@ -30,7 +26,7 @@ func main() {
 
 	router := vestigo.NewRouter()
 
-	router.Get("/", rootHandler, c.StatsdMiddleware)
+	router.Get("/", c.GetD2SVGHandler, c.StatsdMiddleware)
 
 	router.Get("/info", c.GetInfoHandler, c.StatsdMiddleware)
 

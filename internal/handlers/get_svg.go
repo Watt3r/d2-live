@@ -16,7 +16,19 @@ import (
 func (c *Controller) GetD2SVGHandler(rw http.ResponseWriter, req *http.Request) {
 	ctx := context.Background()
 
+	// First, try to get encodedD2 from the path.
 	urlencoded := vestigo.Param(req, "encodedD2")
+
+	// If encodedD2 is not found in the path, look for the ?script= variable.
+	if urlencoded == "" {
+		urlencoded = req.URL.Query().Get("script")
+	}
+
+	// If still not found, return an error.
+	if urlencoded == "" {
+		http.Error(rw, "encodedD2 or script parameter not provided", http.StatusBadRequest)
+		return
+	}
 
 	svg, err := c.handleGetD2SVG(ctx, urlencoded)
 
