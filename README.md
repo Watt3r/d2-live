@@ -26,10 +26,9 @@ Paste it in [d2-playground](https://play.d2lang.com/), the URL will have an enco
 ```
 LNExDsIwEETR3qf4nSt8ABeUSNCGCzhkRSxIHGUXiHN6ZET9NKORZotcx2ReuRfDCr1go9CLGktekwln_xZaFBWZ3cbhSHU10hWy8Smv59BoCiG42nSPXNLtQbf8FnttnZOgllZTt0dOaRDybIX_ge4bAAD__w%3D%3D
 ```
-! Important: the playground URL adds some extra bits after the `script` variable, don't copy these!
 
-Append the encoded string to the service URL, for example: `https://d2.atlas.lucas.tools/svg/<encoded_string>`, you will get an image from the URL:
+Switch the url to the service URL, for example: `https://d2.atlas.lucas.tools/?script=<encoded_string>`, you will get an svg from the URL:
 
-![Diagram](https://d2.atlas.lucas.tools/svg/LNExDsIwEETR3qf4nSt8ABeUSNCGCzhkRSxIHGUXiHN6ZET9NKORZotcx2ReuRfDCr1go9CLGktekwln_xZaFBWZ3cbhSHU10hWy8Smv59BoCiG42nSPXNLtQbf8FnttnZOgllZTt0dOaRDybIX_ge4bAAD__w%3D%3D)
+![Diagram](https://d2.atlas.lucas.tools/?script=LNExDsIwEETR3qf4nSt8ABeUSNCGCzhkRSxIHGUXiHN6ZET9NKORZotcx2ReuRfDCr1go9CLGktekwln_xZaFBWZ3cbhSHU10hWy8Smv59BoCiG42nSPXNLtQbf8FnttnZOgllZTt0dOaRDybIX_ge4bAAD__w%3D%3D)
 
 It is a normal image svg and can be embedded everywhere you want.
