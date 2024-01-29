@@ -23,8 +23,6 @@ func (c *Controller) StatsdMiddleware(f http.HandlerFunc) http.HandlerFunc {
 			path = "svg"
 		}
 
-		complexity := len(req.URL.Query())
-		c.Metrics.Histogram("d2-live."+path+".complexity", float64(complexity), []string{}, 1)
 		c.Metrics.Histogram("d2-live."+path, time.Now().Sub(start).Seconds(), []string{}, 1)
 	}
 }

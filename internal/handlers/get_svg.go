@@ -30,6 +30,9 @@ func (c *Controller) GetD2SVGHandler(rw http.ResponseWriter, req *http.Request) 
 		return
 	}
 
+	// Emit complexity metric
+	c.Metrics.Histogram("d2-live.complexity", float64(len(urlencoded)), []string{}, 1)
+
 	svg, err := c.handleGetD2SVG(ctx, urlencoded)
 
 	if err != nil {
