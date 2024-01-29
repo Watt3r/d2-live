@@ -13,7 +13,7 @@ var Version string
 
 func main() {
 	metricsClient, err := statsd.New("statsd-exporter-service.hyperion.svc.cluster.local:8125",
-		statsd.WithTags([]string{"env:prod", "service:myservice"}),
+		statsd.WithTags([]string{"env:prod"}),
 	)
 	if err != nil {
 		log.Fatal(err)

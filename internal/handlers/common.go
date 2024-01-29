@@ -17,7 +17,14 @@ func (c *Controller) StatsdMiddleware(f http.HandlerFunc) http.HandlerFunc {
 	return func(rw http.ResponseWriter, req *http.Request) {
 		start := time.Now()
 		f(rw, req)
+
 		path := strings.Split(req.URL.Path, "/")[1]
+		if path == "" {
+			path = "svg"
+		}
+
+		complexity := len(req.URL.Query())
+		c.Metrics.Histogram("d2-live."+path+".complexity", float64(complexity), []string{}, 1)
 		c.Metrics.Histogram("d2-live."+path, time.Now().Sub(start).Seconds(), []string{}, 1)
 	}
 }
