@@ -10,7 +10,7 @@ spec:
   tls:
   - hosts:
     - d2.atlas.lucas.tools
-    secretName: atlas-tls
+    secretName: d2-tls
   rules:
   - host: d2.atlas.lucas.tools
     http:
