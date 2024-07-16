@@ -4,12 +4,14 @@ import (
 	"context"
 	"errors"
 	"net/http"
+	"strconv"
 
 	"github.com/husobee/vestigo"
 	"github.com/watt3r/d2-live/internal/urlenc"
 	"oss.terrastruct.com/d2/d2layouts/d2dagrelayout"
 	"oss.terrastruct.com/d2/d2lib"
 	"oss.terrastruct.com/d2/d2renderers/d2svg"
+	"oss.terrastruct.com/d2/d2themes/d2themescatalog"
 	"oss.terrastruct.com/d2/lib/textmeasure"
 )
 
@@ -30,10 +32,25 @@ func (c *Controller) GetD2SVGHandler(rw http.ResponseWriter, req *http.Request) 
 		return
 	}
 
+	// Get theme if provided
+	themeStr := req.URL.Query().Get("theme")
+	var theme int64
+	var err error
+	if themeStr != "" {
+		theme, err = strconv.ParseInt(themeStr, 10, 64)
+		if err != nil {
+			http.Error(rw, "Invalid theme parameter", http.StatusBadRequest)
+			return
+		}
+	} else {
+		// Use a default theme if none is provided
+		theme = d2themescatalog.NeutralDefault.ID
+	}
+
 	// Emit complexity metric
 	c.Metrics.Histogram("d2-live.complexity", float64(len(urlencoded)), []string{}, 1)
 
-	svg, err := c.handleGetD2SVG(ctx, urlencoded)
+	svg, err := c.handleGetD2SVG(ctx, urlencoded, theme)
 
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusBadRequest)
@@ -44,7 +61,7 @@ func (c *Controller) GetD2SVGHandler(rw http.ResponseWriter, req *http.Request) 
 	rw.Write(svg)
 }
 
-func (c *Controller) handleGetD2SVG(ctx context.Context, encoded string) ([]byte, error) {
+func (c *Controller) handleGetD2SVG(ctx context.Context, encoded string, theme int64) ([]byte, error) {
 	decoded, err := urlenc.Decode(encoded)
 	if err != nil {
 		return nil, errors.New("Invalid Base64 data.")
@@ -59,7 +76,8 @@ func (c *Controller) handleGetD2SVG(ctx context.Context, encoded string) ([]byte
 
 	// Render to SVG
 	out, err := d2svg.Render(diagram, &d2svg.RenderOpts{
-		Pad: d2svg.DEFAULT_PADDING,
+		Pad:     d2svg.DEFAULT_PADDING,
+		ThemeID: theme,
 	})
 	if err != nil {
 		return nil, errors.New("Invalid D2 data.")

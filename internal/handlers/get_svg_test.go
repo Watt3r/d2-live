@@ -16,6 +16,7 @@ func TestController_GetD2SVGHandler(t *testing.T) {
 	type state struct {
 		pathEncoded  string
 		queryEncoded string
+		queryTheme   string
 	}
 	type want struct {
 		code int
@@ -28,8 +29,11 @@ func TestController_GetD2SVGHandler(t *testing.T) {
 	}{
 		{"happy path with path param", state{pathEncoded: "qlDQtVOo5AIEAAD__w=="}, want{200, "<?xml version=\"1.0\" encoding=\"utf-8\"?>"}},
 		{"happy path with query param", state{queryEncoded: "qlDQtVOo5AIEAAD__w=="}, want{200, "<?xml version=\"1.0\" encoding=\"utf-8\"?>"}},
+		{"happy path with valid theme", state{queryEncoded: "qlDQtVOo5AIEAAD__w==", queryTheme: "100"}, want{200, "<?xml version=\"1.0\" encoding=\"utf-8\"?>"}},
 		{"fail bad request with path param", state{pathEncoded: "qlDQtVOo5AIEAAD__w==&"}, want{400, "Invalid Base64 data."}},
 		{"fail bad request with query param", state{queryEncoded: "qlDQtVOo5AIEAAD__w==&"}, want{400, "Invalid Base64 data."}},
+		{"fail bad request with no param", state{}, want{400, "encodedD2 or script parameter not provided"}},
+		{"fail bad request with invalid theme", state{queryEncoded: "qlDQtVOo5AIEAAD__w==", queryTheme: "invalid"}, want{400, "Invalid theme parameter"}},
 	}
 
 	for _, tc := range testCases {
@@ -43,6 +47,9 @@ func TestController_GetD2SVGHandler(t *testing.T) {
 			}
 			if tc.state.queryEncoded != "" {
 				q.Set("script", tc.state.queryEncoded)
+			}
+			if tc.state.queryTheme != "" {
+				q.Set("theme", tc.state.queryTheme)
 			}
 			req.URL.RawQuery = q.Encode()
 

@@ -32,6 +32,8 @@ D2-Live is a dynamic tool for creating live, embeddable diagrams using the D2 la
 
 ![Diagram Example](https://d2.atlas.lucas.tools/?script=LNExDsIwEETR3qf4nSt8ABeUSNCGCzhkRSxIHGUXiHN6ZET9NKORZotcx2ReuRfDCr1go9CLGktekwln_xZaFBWZ3cbhSHU10hWy8Smv59BoCiG42nSPXNLtQbf8FnttnZOgllZTt0dOaRDybIX_ge4bAAD__w%3D%3D)
 
+You can use any of the [D2-Themes](https://d2lang.com/tour/themes) to customize the look of your diagram, just add `&theme=<theme_id>` to the URL.
+
 ## Contributing to D2-Live
 We welcome contributions! Please refer to our [Contribution Guidelines](https://github.com/Watt3r/d2-live/CONTRIBUTING.md) for details on how to submit changes, coding standards, and testing procedures.
 

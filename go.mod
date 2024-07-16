@@ -5,7 +5,6 @@ go 1.20
 require (
 	github.com/DataDog/datadog-go/v5 v5.3.0
 	github.com/husobee/vestigo v1.1.1
-	github.com/smartystreets/assertions v1.13.1
 	github.com/stretchr/testify v1.8.1
 	oss.terrastruct.com/d2 v0.4.1
 )
@@ -31,7 +30,6 @@ require (
 	github.com/mazznoer/csscolorparser v0.1.3 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rivo/uniseg v0.4.3 // indirect
-	github.com/stretchr/objx v0.5.0 // indirect
 	github.com/yuin/goldmark v1.5.3 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
