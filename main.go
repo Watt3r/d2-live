@@ -1,12 +1,12 @@
 package main
 
 import (
-	"log"
 	"net/http"
 
 	statsd "github.com/DataDog/datadog-go/v5/statsd"
 	"github.com/husobee/vestigo"
 	"github.com/watt3r/d2-live/internal/handlers"
+	"oss.terrastruct.com/d2/lib/log"
 )
 
 var Version string
@@ -18,6 +18,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Init()
 
 	c := handlers.Controller{
 		Metrics: metricsClient,
@@ -32,5 +33,5 @@ func main() {
 
 	router.Get("/svg/:encodedD2", c.GetD2SVGHandler, c.StatsdMiddleware)
 
-	log.Fatal(http.ListenAndServe(":8090", router))
+	http.ListenAndServe(":8090", router)
 }

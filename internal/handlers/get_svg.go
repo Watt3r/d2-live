@@ -3,20 +3,30 @@ package handlers
 import (
 	"context"
 	"errors"
+	"io"
 	"net/http"
 	"strconv"
 
+	"cdr.dev/slog"
+	"cdr.dev/slog/sloggers/sloghuman"
 	"github.com/husobee/vestigo"
 	"github.com/watt3r/d2-live/internal/urlenc"
+	"oss.terrastruct.com/d2/d2graph"
 	"oss.terrastruct.com/d2/d2layouts/d2dagrelayout"
 	"oss.terrastruct.com/d2/d2lib"
 	"oss.terrastruct.com/d2/d2renderers/d2svg"
 	"oss.terrastruct.com/d2/d2themes/d2themescatalog"
+	"oss.terrastruct.com/d2/lib/log"
 	"oss.terrastruct.com/d2/lib/textmeasure"
+	"oss.terrastruct.com/util-go/go2"
 )
 
+func DiscardSlog(ctx context.Context) context.Context {
+	return log.With(ctx, slog.Make(sloghuman.Sink(io.Discard)))
+}
+
 func (c *Controller) GetD2SVGHandler(rw http.ResponseWriter, req *http.Request) {
-	ctx := context.Background()
+	ctx := DiscardSlog(req.Context())
 
 	// First, try to get encodedD2 from the path.
 	urlencoded := vestigo.Param(req, "encodedD2")
@@ -68,17 +78,22 @@ func (c *Controller) handleGetD2SVG(ctx context.Context, encoded string, theme i
 	}
 
 	ruler, _ := textmeasure.NewRuler()
+	layoutResolver := func(engine string) (d2graph.LayoutGraph, error) {
+		return d2dagrelayout.DefaultLayout, nil
+	}
+	renderOpts := &d2svg.RenderOpts{
+		Pad:     go2.Pointer(int64(5)),
+		ThemeID: &theme,
+	}
+	compileOpts := &d2lib.CompileOptions{
+		LayoutResolver: layoutResolver,
+		Ruler:          ruler,
+	}
 
-	diagram, _, _ := d2lib.Compile(ctx, decoded, &d2lib.CompileOptions{
-		Layout: d2dagrelayout.DefaultLayout,
-		Ruler:  ruler,
-	})
+	diagram, _, _ := d2lib.Compile(ctx, decoded, compileOpts, renderOpts)
 
 	// Render to SVG
-	out, err := d2svg.Render(diagram, &d2svg.RenderOpts{
-		Pad:     d2svg.DEFAULT_PADDING,
-		ThemeID: theme,
-	})
+	out, err := d2svg.Render(diagram, renderOpts)
 	if err != nil {
 		return nil, errors.New("Invalid D2 data.")
 	}
