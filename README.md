@@ -4,7 +4,7 @@
 
 [![Publish Status](https://github.com/Watt3r/d2-live/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/Watt3r/d2-live/actions/workflows/docker-publish.yml)
 [![Build Status](https://github.com/Watt3r/d2-live/actions/workflows/build.yml/badge.svg)](https://github.com/Watt3r/d2-live/actions/workflows/build.yml)
-[![Uptime](https://atlas.lucas.tools/api/badge/2/uptime/240)](https://atlas.lucas.tools/)
+[![Uptime](https://argus.lucas.tools/api/badge/2/uptime/240)](https://argus.lucas.tools/)
 [![License](https://img.shields.io/badge/License-MIT-orange.svg)](https://github.com/Watt3r/d2-live/blob/master/LICENSE)
 [![Coverage Status](https://coveralls.io/repos/github/Watt3r/d2-live/badge.svg?branch=master)](https://coveralls.io/github/Watt3r/d2-live?branch=master)
 </div>
@@ -27,10 +27,10 @@ D2-Live is a dynamic tool for creating live, embeddable diagrams using the D2 la
    z: Fade into horizon
    ```
 2. **Use D2-Playground**: Paste your diagram into [d2-playground](https://play.d2lang.com/).
-3. **Generate Live URL**: Change the URL domain to `d2.atlas.lucas.tools`. For example, `https://d2.atlas.lucas.tools/?script=<encoded_string>` gives you an SVG of your diagram.
+3. **Generate Live URL**: Change the URL domain to `d2.lucas.tools`. For example, `https://d2.lucas.tools/?script=<encoded_string>` gives you an SVG of your diagram.
 4. **Embed and Share**: The SVG diagram can be embedded and shared anywhere.
 
-![Diagram Example](https://d2.atlas.lucas.tools/?script=LNExDsIwEETR3qf4nSt8ABeUSNCGCzhkRSxIHGUXiHN6ZET9NKORZotcx2ReuRfDCr1go9CLGktekwln_xZaFBWZ3cbhSHU10hWy8Smv59BoCiG42nSPXNLtQbf8FnttnZOgllZTt0dOaRDybIX_ge4bAAD__w%3D%3D)
+![Diagram Example](https://d2.lucas.tools/?script=FMwxDsIwDAXQPaf4Wyd6gAyMSLCWC7jUIhE0rmzTNjk9yvykd0Y8E_lgeIvDBTPDE2Nmc2xZyRn3YWfwzgpjLuHE5YoaasQkyI5Dft-l0zqOY6hdW8SDXh9MG6nKMVg_V4Y5qVtoETdaGLm4IInmJiX8AwAA__8%3D&)
 
 You can use any of the [D2-Themes](https://d2lang.com/tour/themes) to customize the look of your diagram, just add `&theme=<theme_id>` to the URL.
 

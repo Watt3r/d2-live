@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: d2-live
+  namespace: hyperion
 spec:
   selector:
     matchLabels:
@@ -22,5 +23,16 @@ spec:
         ports:
         - name: web
           containerPort: 8090
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+          seccompProfile:
+            type: RuntimeDefault
       imagePullSecrets:
         - name: github-container-registry
+      
